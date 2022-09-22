@@ -20,13 +20,27 @@ app.get("/", function (req, res) {
 
 
 // your first API endpoint... 
-app.get("/api/hello", function (req, res) {
-  res.json({greeting: 'hello API'});
+app.get("/api/:date", function (request, response) {
+  const {date} = request.params;
+  const dateStr = date.split("-");
+  let dateObj;
+  if(dateStr.length == 3 ){
+    dateObj = new Date(date);
+  }else{
+    dateObj = new Date(parseInt(date));
+
+  }
+
+  return response.json({
+    unix: dateObj.getTime(),
+    utc: dateObj.toUTCString()
+  });
+  
 });
 
 
 
 // listen for requests :)
-var listener = app.listen(process.env.PORT, function () {
+var listener = app.listen(3333, function () {
   console.log('Your app is listening on port ' + listener.address().port);
 });
