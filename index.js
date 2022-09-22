@@ -22,10 +22,9 @@ app.get("/", function (req, res) {
 // your first API endpoint... 
 app.get("/api/:date", function (request, response) {
   const {date} = request.params;
-  const dateStr = date.split("-");
   let dateObj;
-  let timeStamp;
-  if(dateStr.length == 3 ){
+  let timeStamp = Date.parse(date);
+  if(isNaN(timeStamp) == false){
     dateObj = new Date(date);
     timeStamp = Date.parse(date);
   }else{
@@ -43,6 +42,14 @@ app.get("/api/:date", function (request, response) {
   
 });
 
+app.get("/api/", function (request, response) {
+  const dateObj = new Date();
+  return response.json({
+    unix: dateObj.getTime(),
+    utc: dateObj.toUTCString()
+  });
+  
+});
 
 
 // listen for requests :)
