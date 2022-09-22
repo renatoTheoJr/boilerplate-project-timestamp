@@ -24,13 +24,18 @@ app.get("/api/:date", function (request, response) {
   const {date} = request.params;
   const dateStr = date.split("-");
   let dateObj;
+  let timeStamp;
   if(dateStr.length == 3 ){
     dateObj = new Date(date);
+    timeStamp = Date.parse(date);
   }else{
     dateObj = new Date(parseInt(date));
-
+    timeStamp = parseInt(date);
   }
 
+  if(isNaN(timeStamp)){
+    return response.json({error: "Invalid Date"});
+  }
   return response.json({
     unix: dateObj.getTime(),
     utc: dateObj.toUTCString()
@@ -41,6 +46,6 @@ app.get("/api/:date", function (request, response) {
 
 
 // listen for requests :)
-var listener = app.listen(3333, function () {
+var listener = app.listen(process.env.PORT, function () {
   console.log('Your app is listening on port ' + listener.address().port);
 });
